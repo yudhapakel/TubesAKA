@@ -1,8 +1,28 @@
 #include <iostream>
 #include <string>
+#include <chrono>
 using namespace std;
 
 const int MAX_TUGAS = 100; // Batas maksimal jumlah tugas
+// timer untuk menghitung waktu algoritma
+class timer
+{
+public:
+    timer() { start = std::chrono::high_resolution_clock::now(); }
+    ~timer() {}
+
+    void reset() { start = std::chrono::high_resolution_clock::now(); }
+    float elapsed_ms()
+    {
+        auto end = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        return static_cast<float>(elapsed);
+    }
+
+private:
+    std::chrono::high_resolution_clock::time_point start;
+};
+
 
 class PrioritySchedulingIterative {
 private:
@@ -65,6 +85,7 @@ public:
 };
 
 int main() {
+     timer my_timer; // mulai
     PrioritySchedulingIterative penjadwalan;
     char pilih;
     int jumlahTugas;
@@ -127,6 +148,9 @@ int main() {
 
     penjadwalan.jadwalkan();
     penjadwalan.printJadwal();
+
+    float elapsed = my_timer.elapsed_ms(); // akhir
+    std::cout << "Total waktu: " << elapsed * 0.001f << " sec\n";
 
     return 0;
 }

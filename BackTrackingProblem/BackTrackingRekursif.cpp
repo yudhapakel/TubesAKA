@@ -1,9 +1,29 @@
 #include <iostream>
 #include <string>
+#include <chrono>
 using namespace std;
 
 const int MAX_TUGAS = 100; // Maksimal jumlah tugas
 const int MAX_WAKTU = 100; // Maksimal jumlah waktu
+
+// timer untuk menghitung waktu algoritma
+class timer
+{
+public:
+    timer() { start = std::chrono::high_resolution_clock::now(); }
+    ~timer() {}
+
+    void reset() { start = std::chrono::high_resolution_clock::now(); }
+    float elapsed_ms()
+    {
+        auto end = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        return static_cast<float>(elapsed);
+    }
+
+private:
+    std::chrono::high_resolution_clock::time_point start;
+};
 
 class PenjadwalanTugas {
 private:
@@ -78,6 +98,7 @@ public:
 };
 
 int main() {
+     timer my_timer; // mulai
     string tugas[MAX_TUGAS];
     string waktu[MAX_WAKTU];
     int jumlahTugas, jumlahWaktu;
@@ -150,6 +171,9 @@ int main() {
             cout << "Tidak dapat menjadwalkan semua tugas tanpa konflik waktu." << endl;
         }
     }
+
+     float elapsed = my_timer.elapsed_ms(); // akhir
+    std::cout << "Total waktu: " << elapsed * 0.001f << " sec\n";
 
     return 0;
 }

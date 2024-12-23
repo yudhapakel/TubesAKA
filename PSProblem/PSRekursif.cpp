@@ -1,26 +1,53 @@
 #include <iostream>
 #include <string>
+#include <chrono>
 using namespace std;
 
 const int MAX_TUGAS = 100; // Batas maksimal jumlah tugas
 
-class PrioritySchedulingRecursive {
+// timer untuk menghitung waktu algoritma
+class timer
+{
+public:
+    timer() { start = std::chrono::high_resolution_clock::now(); }
+    ~timer() {}
+
+    void reset() { start = std::chrono::high_resolution_clock::now(); }
+    float elapsed_ms()
+    {
+        auto end = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        return static_cast<float>(elapsed);
+    }
+
 private:
-    struct Tugas {
-        string nama;    // Nama tugas
-        int prioritas;  // Prioritas tugas (semakin kecil semakin penting)
-        int durasi;     // Durasi pengerjaan tugas
+    std::chrono::high_resolution_clock::time_point start;
+};
+
+
+class PrioritySchedulingRecursive
+{
+private:
+    struct Tugas
+    {
+        string nama;   // Nama tugas
+        int prioritas; // Prioritas tugas (semakin kecil semakin penting)
+        int durasi;    // Durasi pengerjaan tugas
     };
 
     Tugas tugas[MAX_TUGAS]; // Array untuk menyimpan daftar tugas
     int jumlahTugas;        // Jumlah tugas yang ada
 
     // Rekursif: Sorting tugas berdasarkan durasi
-    void recursiveSort(int n) {
-        if (n <= 1) return;
+    void recursiveSort(int n)
+    {
+        if (n <= 1)
+            return;
 
-        for (int i = 0; i < n - 1; i++) {
-            if (tugas[i].durasi > tugas[i + 1].durasi) {
+        for (int i = 0; i < n - 1; i++)
+        {
+            if (tugas[i].durasi > tugas[i + 1].durasi)
+            {
                 Tugas temp = tugas[i];
                 tugas[i] = tugas[i + 1];
                 tugas[i + 1] = temp;
@@ -31,33 +58,42 @@ private:
     }
 
 public:
-    PrioritySchedulingRecursive() {
+    PrioritySchedulingRecursive()
+    {
         jumlahTugas = 0;
     }
 
     // Iteratif: Menambahkan tugas ke dalam daftar
-    void tambahTugas(const string &nama, int durasi) {
-        if (jumlahTugas < MAX_TUGAS) {
+    void tambahTugas(const string &nama, int durasi)
+    {
+        if (jumlahTugas < MAX_TUGAS)
+        {
             tugas[jumlahTugas].nama = nama;
             tugas[jumlahTugas].durasi = durasi;
             jumlahTugas++;
-        } else {
+        }
+        else
+        {
             cout << "Tidak dapat menambahkan tugas lagi, daftar penuh!\n";
         }
     }
 
     // Menjadwalkan tugas berdasarkan durasi dan menetapkan prioritas
-    void jadwalkan() {
+    void jadwalkan()
+    {
         recursiveSort(jumlahTugas);
-        for (int i = 0; i < jumlahTugas; i++) {
+        for (int i = 0; i < jumlahTugas; i++)
+        {
             tugas[i].prioritas = i + 1; // Menetapkan prioritas berdasarkan urutan setelah sorting
         }
     }
 
     // Iteratif: Menampilkan hasil penjadwalan
-    void printJadwal() {
+    void printJadwal()
+    {
         cout << "Daftar Tugas Berdasarkan Durasi dan Prioritas:\n";
-        for (int i = 0; i < jumlahTugas; i++) {
+        for (int i = 0; i < jumlahTugas; i++)
+        {
             cout << "Nama: " << tugas[i].nama
                  << ", Prioritas: " << tugas[i].prioritas
                  << ", Durasi: " << tugas[i].durasi << " jam\n";
@@ -65,52 +101,58 @@ public:
     }
 };
 
-int main() {
+int main()
+{
+    timer my_timer; // mulai
+    
     PrioritySchedulingRecursive penjadwalan;
     char pilih;
     int jumlahTugas;
 
     // Data dummy
     string tugasDummy[] = {
-    "Tugas 1", "Tugas 2", "Tugas 3", "Tugas 4", "Tugas 5", 
-    "Tugas 6", "Tugas 7", "Tugas 8", "Tugas 9", "Tugas 10", 
-    "Tugas 11", "Tugas 12", "Tugas 13", "Tugas 14", "Tugas 15", 
-    "Tugas 16", "Tugas 17", "Tugas 18", "Tugas 19", "Tugas 20", 
-    "Tugas 21", "Tugas 22", "Tugas 23", "Tugas 24", "Tugas 25", 
-    "Tugas 26", "Tugas 27", "Tugas 28", "Tugas 29", "Tugas 30", 
-    "Tugas 31", "Tugas 32", "Tugas 33", "Tugas 34", "Tugas 35", 
-    "Tugas 36", "Tugas 37", "Tugas 38", "Tugas 39", "Tugas 40", 
-    "Tugas 41", "Tugas 42", "Tugas 43", "Tugas 44", "Tugas 45", 
-    "Tugas 46", "Tugas 47", "Tugas 48", "Tugas 49", "Tugas 50"
-    };
+        "Tugas 1", "Tugas 2", "Tugas 3", "Tugas 4", "Tugas 5",
+        "Tugas 6", "Tugas 7", "Tugas 8", "Tugas 9", "Tugas 10",
+        "Tugas 11", "Tugas 12", "Tugas 13", "Tugas 14", "Tugas 15",
+        "Tugas 16", "Tugas 17", "Tugas 18", "Tugas 19", "Tugas 20",
+        "Tugas 21", "Tugas 22", "Tugas 23", "Tugas 24", "Tugas 25",
+        "Tugas 26", "Tugas 27", "Tugas 28", "Tugas 29", "Tugas 30",
+        "Tugas 31", "Tugas 32", "Tugas 33", "Tugas 34", "Tugas 35",
+        "Tugas 36", "Tugas 37", "Tugas 38", "Tugas 39", "Tugas 40",
+        "Tugas 41", "Tugas 42", "Tugas 43", "Tugas 44", "Tugas 45",
+        "Tugas 46", "Tugas 47", "Tugas 48", "Tugas 49", "Tugas 50"};
 
     int durasiDummy[] = {
-    2, 4, 3, 1, 5, 
-    6, 8, 7, 9, 10, 
-    1, 3, 2, 5, 4, 
-    6, 8, 10, 9, 7, 
-    3, 5, 4, 1, 2, 
-    7, 6, 8, 10, 9, 
-    4, 3, 1, 2, 5, 
-    10, 9, 7, 8, 6, 
-    2, 1, 5, 4, 3, 
-    9, 10, 8, 6, 7
-    };
+        2, 4, 3, 1, 5,
+        6, 8, 7, 9, 10,
+        1, 3, 2, 5, 4,
+        6, 8, 10, 9, 7,
+        3, 5, 4, 1, 2,
+        7, 6, 8, 10, 9,
+        4, 3, 1, 2, 5,
+        10, 9, 7, 8, 6,
+        2, 1, 5, 4, 3,
+        9, 10, 8, 6, 7};
 
     cout << "Apakah Anda ingin memasukkan data tugas sendiri? (y/n): ";
     cin >> pilih;
     cin.ignore(); // Membersihkan buffer input
 
-    if (pilih == 'n' || pilih == 'N') {
-        for (int i = 0; i < 50; i++) {
+    if (pilih == 'n' || pilih == 'N')
+    {
+        for (int i = 0; i < 50; i++)
+        {
             penjadwalan.tambahTugas(tugasDummy[i], durasiDummy[i]);
         }
-    } else {
+    }
+    else
+    {
         cout << "Masukkan jumlah tugas: ";
         cin >> jumlahTugas;
         cin.ignore();
 
-        for (int i = 0; i < jumlahTugas; i++) {
+        for (int i = 0; i < jumlahTugas; i++)
+        {
             string nama;
             int durasi;
 
@@ -128,6 +170,11 @@ int main() {
 
     penjadwalan.jadwalkan();
     penjadwalan.printJadwal();
+
+
+
+    float elapsed = my_timer.elapsed_ms(); // akhir
+    std::cout << "Total waktu: " << elapsed * 0.001f << " sec\n";
 
     return 0;
 }

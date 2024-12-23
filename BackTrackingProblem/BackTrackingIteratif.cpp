@@ -1,10 +1,30 @@
 #include <iostream>
 #include <string>
 #include <stack>
+#include <chrono>
 using namespace std;
 
 const int MAX_TUGAS = 100; // Maksimal jumlah tugas
 const int MAX_WAKTU = 100; // Maksimal jumlah waktu
+
+// timer untuk menghitung waktu algoritma
+class timer
+{
+public:
+    timer() { start = std::chrono::high_resolution_clock::now(); }
+    ~timer() {}
+
+    void reset() { start = std::chrono::high_resolution_clock::now(); }
+    float elapsed_ms()
+    {
+        auto end = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        return static_cast<float>(elapsed);
+    }
+
+private:
+    std::chrono::high_resolution_clock::time_point start;
+};
 
 class PenjadwalanTugas {
 private:
@@ -82,41 +102,26 @@ public:
 };
 
 int main() {
+     timer my_timer; // mulai
     string tugas[MAX_TUGAS];
     string waktu[MAX_WAKTU];
     int jumlahTugas, jumlahWaktu;
     char pilih;
 
     // Data dummy tugas dan waktu
-    string tugasDummy[] = {
-    "Tugas 1", "Tugas 2", "Tugas 3", "Tugas 4", "Tugas 5", 
-    "Tugas 6", "Tugas 7", "Tugas 8", "Tugas 9", "Tugas 10", 
-    "Tugas 11", "Tugas 12", "Tugas 13", "Tugas 14", "Tugas 15", 
-    "Tugas 16", "Tugas 17", "Tugas 18", "Tugas 19", "Tugas 20", 
-    "Tugas 21", "Tugas 22", "Tugas 23", "Tugas 24", "Tugas 25", 
-    "Tugas 26", "Tugas 27", "Tugas 28", "Tugas 29", "Tugas 30", 
-    "Tugas 31", "Tugas 32", "Tugas 33", "Tugas 34", "Tugas 35", 
-    "Tugas 36", "Tugas 37", "Tugas 38", "Tugas 39", "Tugas 40", 
-    "Tugas 41", "Tugas 42", "Tugas 43", "Tugas 44", "Tugas 45", 
-    "Tugas 46", "Tugas 47", "Tugas 48", "Tugas 49", "Tugas 50"
+   string tugasDummy[] = {
+        "Tugas 1", "Tugas 2", "Tugas 3", "Tugas 4", "Tugas 5",
+        "Tugas 6", "Tugas 7", "Tugas 8", "Tugas 9", "Tugas 10"
     };
     string waktuDummy[] = {
         "Senin Pagi", "Senin Siang", "Selasa Pagi", "Selasa Siang",
         "Rabu Pagi", "Rabu Siang", "Kamis Pagi", "Kamis Siang",
-        "Jumat Pagi", "Jumat Siang","senin siang", "Senin Pagi", "Senin Siang", "Selasa Pagi", "Selasa Siang",
-        "Rabu Pagi", "Rabu Siang", "Kamis Pagi", "Kamis Siang",
-        "Jumat Pagi", "Jumat Siang","senin siang",  "Senin Pagi", "Senin Siang", "Selasa Pagi", "Selasa Siang",
-        "Rabu Pagi", "Rabu Siang", "Kamis Pagi", "Kamis Siang",
-        "Jumat Pagi", "Jumat Siang","senin siang",  "Senin Pagi", "Senin Siang", "Selasa Pagi", "Selasa Siang",
-        "Rabu Pagi", "Rabu Siang", "Kamis Pagi", "Kamis Siang",
-        "Jumat Pagi", "Jumat Siang","senin siang",  "Senin Pagi", "Senin Siang", "Selasa Pagi", "Selasa Siang",
-        "Rabu Pagi", "Rabu Siang", "Kamis Pagi", "Kamis Siang",
-        "Jumat Pagi", "Jumat Siang","senin siang", 
+        "Jumat Pagi", "Jumat Siang"
     };
 
     // Jumlah tugas dan waktu dummy
-    jumlahTugas = 50;
-    jumlahWaktu = 50;
+    jumlahTugas = 10;
+    jumlahWaktu = 10;
 
     // Menanyakan apakah pengguna ingin memasukkan data sendiri atau menggunakan data dummy
     cout << "Apakah Anda ingin memasukkan data tugas dan waktu sendiri? (y/n): ";
@@ -170,6 +175,9 @@ int main() {
             cout << "Tidak dapat menjadwalkan semua tugas tanpa konflik waktu." << endl;
         }
     }
+
+     float elapsed = my_timer.elapsed_ms(); // akhir
+    std::cout << "Total waktu: " << elapsed * 0.001f << " sec\n";
 
     return 0;
 }
