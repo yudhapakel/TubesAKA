@@ -89,7 +89,7 @@ int main() {
 
     // Data dummy tugas dan waktu
     string tugasDummy[] = {
-"Tugas 1", "Tugas 2", "Tugas 3", "Tugas 4", "Tugas 5", 
+    "Tugas 1", "Tugas 2", "Tugas 3", "Tugas 4", "Tugas 5", 
     "Tugas 6", "Tugas 7", "Tugas 8", "Tugas 9", "Tugas 10", 
     "Tugas 11", "Tugas 12", "Tugas 13", "Tugas 14", "Tugas 15", 
     "Tugas 16", "Tugas 17", "Tugas 18", "Tugas 19", "Tugas 20", 
