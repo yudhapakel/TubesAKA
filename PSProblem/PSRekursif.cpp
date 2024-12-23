@@ -112,27 +112,11 @@ int main()
     // Data dummy
     string tugasDummy[] = {
         "Tugas 1", "Tugas 2", "Tugas 3", "Tugas 4", "Tugas 5",
-        "Tugas 6", "Tugas 7", "Tugas 8", "Tugas 9", "Tugas 10",
-        "Tugas 11", "Tugas 12", "Tugas 13", "Tugas 14", "Tugas 15",
-        "Tugas 16", "Tugas 17", "Tugas 18", "Tugas 19", "Tugas 20",
-        "Tugas 21", "Tugas 22", "Tugas 23", "Tugas 24", "Tugas 25",
-        "Tugas 26", "Tugas 27", "Tugas 28", "Tugas 29", "Tugas 30",
-        "Tugas 31", "Tugas 32", "Tugas 33", "Tugas 34", "Tugas 35",
-        "Tugas 36", "Tugas 37", "Tugas 38", "Tugas 39", "Tugas 40",
-        "Tugas 41", "Tugas 42", "Tugas 43", "Tugas 44", "Tugas 45",
-        "Tugas 46", "Tugas 47", "Tugas 48", "Tugas 49", "Tugas 50"};
+        "Tugas 6", "Tugas 7", "Tugas 8", "Tugas 9", "Tugas 10"};
 
     int durasiDummy[] = {
         2, 4, 3, 1, 5,
-        6, 8, 7, 9, 10,
-        1, 3, 2, 5, 4,
-        6, 8, 10, 9, 7,
-        3, 5, 4, 1, 2,
-        7, 6, 8, 10, 9,
-        4, 3, 1, 2, 5,
-        10, 9, 7, 8, 6,
-        2, 1, 5, 4, 3,
-        9, 10, 8, 6, 7};
+        6, 8, 7, 9, 10};
 
     cout << "Apakah Anda ingin memasukkan data tugas sendiri? (y/n): ";
     cin >> pilih;
@@ -140,7 +124,7 @@ int main()
 
     if (pilih == 'n' || pilih == 'N')
     {
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 10; i++)
         {
             penjadwalan.tambahTugas(tugasDummy[i], durasiDummy[i]);
         }
