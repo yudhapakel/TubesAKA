@@ -4,7 +4,6 @@
 #include <stack>
 
 using namespace std;
-
 // Fungsi untuk memeriksa apakah jadwal kuliah aman
 bool isSafe(const vector<int>& schedule, int course, int timeSlot) {
     for (int i = 0; i < schedule.size(); ++i) {
