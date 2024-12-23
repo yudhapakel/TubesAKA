@@ -1,59 +1,155 @@
 #include <iostream>
-#include <vector>
 #include <string>
-
 using namespace std;
 
-// Fungsi untuk memeriksa apakah jadwal kuliah aman
-bool isSafe(const vector<int>& schedule, int course, int timeSlot) {
-    for (int i = 0; i < schedule.size(); ++i) {
-        if (schedule[i] == timeSlot && i != course) {
-            return false;
-        }
-    }
-    return true;
-}
-// Fungsi rekursif untuk menyelesaikan penjadwalan kuliah
-bool scheduleCoursesRecursive(vector<int>& schedule, const vector<string>& courses, const vector<int>& timeSlots, int courseIndex) {
-    if (courseIndex == courses.size()) {
-        return true; // Semua mata kuliah sudah dijadwalkan
-    }
+const int MAX_TUGAS = 100; // Maksimal jumlah tugas
+const int MAX_WAKTU = 100; // Maksimal jumlah waktu
 
-    for (int timeSlot : timeSlots) {
-        if (isSafe(schedule, courseIndex, timeSlot)) {
-            schedule[courseIndex] = timeSlot;
+class PenjadwalanTugas {
+private:
+    string tugas[MAX_TUGAS];  // Daftar tugas
+    string waktu[MAX_WAKTU];  // Daftar waktu yang tersedia
+    string jadwal[MAX_TUGAS]; // Jadwal hasil (waktu untuk setiap tugas)
+    int jumlahTugas;          // Jumlah tugas
+    int jumlahWaktu;          // Jumlah waktu yang tersedia
 
-            if (scheduleCoursesRecursive(schedule, courses, timeSlots, courseIndex + 1)) {
-                return true;
+    // Mengecek apakah waktu tertentu sudah digunakan
+    bool isValid(const string& waktuSekarang, int idx) {
+        for (int i = 0; i < idx; i++) {
+            if (jadwal[i] == waktuSekarang) {
+                return false;
             }
+        }
+        return true;
+    }
 
-            schedule[courseIndex] = -1; // Backtrack
+    // Fungsi backtracking untuk menjadwalkan tugas
+    bool backtrack(int idx) {
+        // Jika semua tugas sudah dijadwalkan
+        if (idx == jumlahTugas) {
+            return true;
+        }
+
+        // Mencoba setiap waktu yang tersedia
+        for (int i = 0; i < jumlahWaktu; i++) {
+            if (isValid(waktu[i], idx)) {
+                // Menjadwalkan tugas ke waktu ini
+                jadwal[idx] = waktu[i];
+
+                // Rekursi ke tugas berikutnya
+                if (backtrack(idx + 1)) {
+                    return true;
+                }
+
+                // Backtrack
+                jadwal[idx] = "";
+            }
+        }
+
+        return false;
+    }
+
+public:
+    PenjadwalanTugas(string tugasArr[], int jumlahTugas, string waktuArr[], int jumlahWaktu) {
+        this->jumlahTugas = jumlahTugas;
+        this->jumlahWaktu = jumlahWaktu;
+
+        for (int i = 0; i < jumlahTugas; i++) {
+            this->tugas[i] = tugasArr[i];
+            this->jadwal[i] = ""; // Inisialisasi jadwal kosong
+        }
+
+        for (int i = 0; i < jumlahWaktu; i++) {
+            this->waktu[i] = waktuArr[i];
         }
     }
 
-return false;
-}
-// Fungsi untuk mencetak jadwal kuliah
-void printSchedule(const vector<string>& courses, const vector<int>& schedule) {
-    for (int i = 0; i < courses.size(); ++i) {
-        cout << "Course: " << courses[i] << ", Time Slot: " << schedule[i] << endl;
+    // Memulai proses penjadwalan
+    bool jadwalkan() {
+        return backtrack(0);
     }
-}
-// Fungsi utama untuk mengatur penjadwalan kuliah
-void scheduleCourses(const vector<string>& courses, const vector<int>& timeSlots) {
-    vector<int> schedule(courses.size(), -1); // -1 berarti belum dijadwalkan
 
-    if (scheduleCoursesRecursive(schedule, courses, timeSlots, 0)) {
-        printSchedule(courses, schedule);
-    } else {
-        cout << "No valid schedule found" << endl;
+    // Menampilkan hasil penjadwalan
+    void printJadwal() {
+        for (int i = 0; i < jumlahTugas; i++) {
+            cout << tugas[i] << " -> " << jadwal[i] << endl;
+        }
     }
-}
+};
+
 int main() {
-    vector<string> courses = {"Math", "Physics", "Chemistry", "Biology"};
-    vector<int> timeSlots = {1, 2, 3}; // 3 waktu yang tersedia
+    string tugas[MAX_TUGAS];
+    string waktu[MAX_WAKTU];
+    int jumlahTugas, jumlahWaktu;
+    char pilih;
 
-    scheduleCourses(courses, timeSlots);
+    // Data dummy tugas dan waktu
+    string tugasDummy[] = {
+        "Tugas 1", "Tugas 2", "Tugas 3", "Tugas 4", "Tugas 5",
+        "Tugas 6", "Tugas 7", "Tugas 8", "Tugas 9", "Tugas 10"
+    };
+    string waktuDummy[] = {
+        "Senin Pagi", "Senin Siang", "Selasa Pagi", "Selasa Siang",
+        "Rabu Pagi", "Rabu Siang", "Kamis Pagi", "Kamis Siang",
+        "Jumat Pagi", "Jumat Siang"
+    };
+
+    // Jumlah tugas dan waktu dummy
+    jumlahTugas = 10;
+    jumlahWaktu = 10;
+
+    // Menanyakan apakah pengguna ingin memasukkan data sendiri atau menggunakan data dummy
+    cout << "Apakah Anda ingin memasukkan data tugas dan waktu sendiri? (y/n): ";
+    cin >> pilih;
+    cin.ignore(); // Membersihkan buffer input
+
+    if (pilih == 'n' || pilih == 'N') {
+        // Menggunakan data dummy
+        PenjadwalanTugas penjadwalan(tugasDummy, jumlahTugas, waktuDummy, jumlahWaktu);
+
+        // Menjadwalkan tugas
+        if (penjadwalan.jadwalkan()) {
+            cout << "Hasil Penjadwalan:" << endl;
+            penjadwalan.printJadwal();
+        } else {
+            cout << "Tidak dapat menjadwalkan semua tugas tanpa konflik waktu." << endl;
+        }
+    } else {
+        // Input data tugas dan waktu dari pengguna
+        cout << "Masukkan jumlah tugas: ";
+        cin >> jumlahTugas;
+        cin.ignore(); // Membersihkan buffer input
+
+        // Input daftar tugas
+        cout << "Masukkan nama tugas:" << endl;
+        for (int i = 0; i < jumlahTugas; i++) {
+            cout << "Tugas " << i + 1 << ": ";
+            getline(cin, tugas[i]);
+        }
+
+        // Input jumlah waktu
+        cout << "Masukkan jumlah waktu: ";
+        cin >> jumlahWaktu;
+        cin.ignore(); // Membersihkan buffer input
+
+        // Input daftar waktu
+        cout << "Masukkan nama waktu yang tersedia:" << endl;
+        for (int i = 0; i < jumlahWaktu; i++) {
+            cout << "Waktu " << i + 1 << ": ";
+            getline(cin, waktu[i]);
+        }
+
+        // Membuat objek penjadwalan
+        PenjadwalanTugas penjadwalan(tugas, jumlahTugas, waktu, jumlahWaktu);
+
+        // Menjadwalkan tugas
+        if (penjadwalan.jadwalkan()) {
+            cout << "Hasil Penjadwalan:" << endl;
+            penjadwalan.printJadwal();
+        } else {
+            cout << "Tidak dapat menjadwalkan semua tugas tanpa konflik waktu." << endl;
+        }
+    }
 
     return 0;
 }
